@@ -114,7 +114,7 @@ def login():
         # if user exists, than check hashed password
         if not user:
             flash("This email doesn't exist in our database!")
-            return render_template("login.html")
+            return render_template("login.html", form=form)
 
         # check hashed password
         if check_password_hash(pwhash=user.password, password=form.password.data):
