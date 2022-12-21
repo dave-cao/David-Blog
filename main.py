@@ -123,7 +123,7 @@ def login():
         else:
             # password is incorrect
             flash("Incorrect password, try again!")
-            return render_template("login.html")
+            return render_template("login.html", form=form)
 
     return render_template("login.html", form=form)
 
