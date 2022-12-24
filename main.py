@@ -103,7 +103,6 @@ def register():
 
         login_user(new_user)
 
-        git_push("A new user has been registered")
         return redirect(url_for("home"))
     return render_template("register.html", form=form)
 
@@ -156,8 +155,6 @@ def show_post(post_id):
             db.session.add(new_comment)
             db.session.commit()
 
-            git_push("A user has posted a comment")
-
             return redirect(url_for("show_post", post_id=post_id))
 
         else:
@@ -185,8 +182,6 @@ def add_new_post():
         db.session.add(new_post)
         db.session.commit()
 
-        git_push("Added new post")
-
         return redirect(url_for("home"))
     return render_template("make-post.html", form=form)
 
@@ -209,8 +204,6 @@ def edit_post(post_id):
         post.body = edit_form.body.data
         db.session.commit()
 
-        git_push("Edited a post")
-
         return redirect(url_for("show_post", post_id=post.id))
 
     return render_template("make-post.html", form=edit_form, is_edit=True)
@@ -222,8 +215,6 @@ def delete_post(post_id):
     post_to_delete = BlogPost.query.get(post_id)
     db.session.delete(post_to_delete)
     db.session.commit()
-
-    git_push("Deleted a post")
 
     return redirect(url_for("home"))
 
