@@ -182,6 +182,8 @@ def add_new_post():
         db.session.add(new_post)
         db.session.commit()
 
+        git_push("Added a post -- autobackup")
+
         return redirect(url_for("home"))
     return render_template("make-post.html", form=form)
 
@@ -204,6 +206,8 @@ def edit_post(post_id):
         post.body = edit_form.body.data
         db.session.commit()
 
+        git_push("Edited a post -- autobackup")
+
         return redirect(url_for("show_post", post_id=post.id))
 
     return render_template("make-post.html", form=edit_form, is_edit=True)
@@ -215,6 +219,8 @@ def delete_post(post_id):
     post_to_delete = BlogPost.query.get(post_id)
     db.session.delete(post_to_delete)
     db.session.commit()
+
+    git_push("Deleted a post -- auto-backup")
 
     return redirect(url_for("home"))
 
