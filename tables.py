@@ -1,15 +1,25 @@
+import os
+
+from dotenv import load_dotenv
 from flask import Flask
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import declarative_base, relationship
+
+load_dotenv()
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///blog.db"
+db_uri = os.getenv("DATABASE_URL", "Can't access").replace(
+    "postgresql://", "cockroachdb://"
+)
+app.config["SQLALCHEMY_DATABASE_URI"] = db_uri
 db = SQLAlchemy(app)
 
+Base = declarative_base()
 
-class BlogPost(db.Model):
+
+class BlogPost(db.Model, Base):
     __tablename__ = "blog_posts"
     id = db.Column(db.Integer, primary_key=True)
     author = relationship("User", back_populates="posts")
@@ -24,7 +34,7 @@ class BlogPost(db.Model):
     comments = relationship("Comment", back_populates="post")
 
 
-class User(UserMixin, db.Model):
+class User(UserMixin, db.Model, Base):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(100), unique=True)
@@ -38,7 +48,7 @@ class User(UserMixin, db.Model):
     comments = relationship("Comment", back_populates="author")
 
 
-class Comment(db.Model):
+class Comment(db.Model, Base):
     __tablename__ = "comments"
     id = db.Column(db.Integer, primary_key=True)
     text = db.Column(db.Text, nullable=False)

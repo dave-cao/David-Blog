@@ -1,6 +1,8 @@
+import os
 from datetime import date
 from functools import wraps
 
+from dotenv import load_dotenv
 from flask import Flask, abort, flash, redirect, render_template, url_for
 from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
@@ -14,13 +16,20 @@ from forms import CommentForm, CreatePostForm, LoginForm, RegisterForm
 from git_handle import git_push
 from tables import BlogPost, Comment, User, db
 
+load_dotenv()
+
+
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "8BYkEfBA6O6donzWlSihBXox7C0sKR6b"
 ckedditor = CKEditor(app)
 Bootstrap(app)
 
 # Connect to DB
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///blog.db"
+db_uri = os.getenv("DATABASE_URL", "Can't access").replace(
+    "postgresql://", "cockroachdb://"
+)
+app.config["SQLALCHEMY_DATABASE_URI"] = db_uri
+print("Connected to database...")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
 
@@ -52,7 +61,7 @@ def admin_only(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         # If id is not 1 then return abort with 403 error
-        if current_user.id != 1:
+        if current_user.id != 830731524701683713:
             return abort(403)
         # Otherwise continue with the route function
         return f(*args, **kwargs)
