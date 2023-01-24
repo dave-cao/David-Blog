@@ -4,4 +4,4 @@
 - A simple and beautiful blog website created using Flask, Boostrap, and Python.
 
 - Check it out here!
-- https://david-blog.onrender.com
+- https://davidsblog.xyz
