@@ -68,7 +68,11 @@ def get_year():
 
 @app.route("/")
 def home():
-    posts = BlogPost.query.all()[::-1]
+
+    first_post, *posts = BlogPost.query.all()
+    (*posts,) = first_post, *posts[::-1]
+    print(posts)
+
     return render_template("index.html", all_posts=posts)
 
 
