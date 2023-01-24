@@ -7,6 +7,7 @@ from flask_ckeditor import CKEditor
 from flask_gravatar import Gravatar
 from flask_login import (LoginManager, current_user, login_required,
                          login_user, logout_user)
+from flask_wtf.csrf import CSRFProtect
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from forms import CommentForm, CreatePostForm, LoginForm, RegisterForm
@@ -16,7 +17,13 @@ from tables import BlogPost, Comment, User, db
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "8BYkEfBA6O6donzWlSihBXox7C0sKR6b"
-ckedditor = CKEditor(app)
+
+# interacting with CkEditor
+ckeditor = CKEditor(app)
+app.config["CKEDITOR_PKG_TYPE"] = "standard-all"
+app.config["CKEDITOR_ENABLE_CODESNIPPET"] = True
+
+# Bootstrap
 Bootstrap(app)
 
 # Connect to DB
