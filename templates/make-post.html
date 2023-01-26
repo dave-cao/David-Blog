@@ -27,7 +27,7 @@
       <div class="col-lg-8 col-md-10 mx-auto">
         {% block form %}{{super()}}{% endblock %}
         {{ ckeditor.load_code_theme() }}
-        {{ ckeditor.load() }}
+        {{ ckeditor.load(custom_url=url_for('static', filename='ckeditor/ckeditor.js')) }}
         {{ ckeditor.config(name='body') }}
       </div>
     </div>
